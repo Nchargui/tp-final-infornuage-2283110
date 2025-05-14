@@ -1,0 +1,49 @@
+services:
+  backend:
+    image: nadch4/tp-final-2283110-homebreeze-backend:${BACKEND_VO:-latest}
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "9696:9696"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      - SPRING_APPLICATION_NAME=backend
+      - SERVER_PORT=${API_PORT}
+      - SPRING_DATASOURCE_URL=${MARIA_DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+    networks:
+      - my-network
+ 
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${MARIA_DB_URL}
+    networks:
+      - my-network
+    volumes:
+      - db:/data/db
+      - ./db-seed:/docker-entrypoint-initdb.d
+
+ 
+  frontend:
+    image: nadch4/tp-final-2283110-homebreeze-frontend:${FRONTEND_VO:-latest}
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - my-network
+volumes:
+  db:
+ 
+networks:
+  my-network:
+    driver: bridge
