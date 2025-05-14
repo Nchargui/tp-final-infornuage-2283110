@@ -1,0 +1,6 @@
+[submodule "homebreeze-backend-2283110"]
+	path = homebreeze-backend-2283110
+	url = https://github.com/Nchargui/tp-final-infornuage-2283110-backend.git
+[submodule "homebreeze-frontend-2283110"]
+	path = homebreeze-frontend-2283110
+	url = https://github.com/Nchargui/tp-final-infornuage-2283110-frontend.git
