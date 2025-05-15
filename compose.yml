@@ -1,6 +1,6 @@
 services:
   backend:
-    image: nadch4/tp-final-2283110-homebreeze-backend:${BACKEND_VO:-latest}
+    image: nadch4/tp-final-2283110-homebreeze-backend:v1
     build:
       context: ./backend
     container_name: backend
@@ -11,10 +11,10 @@ services:
         condition: service_healthy
     environment:
       - SPRING_APPLICATION_NAME=backend
-      - SERVER_PORT=${API_PORT}
-      - SPRING_DATASOURCE_URL=${MARIA_DB_URL}
-      - SPRING_DATASOURCE_USERNAME=${DB_USER}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SERVER_PORT=9696
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/home_breeze_bd
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
     networks:
       - my-network
  
@@ -22,17 +22,22 @@ services:
     image: mariadb
     container_name: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${MARIA_DB_URL}
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=home_breeze_bd
     networks:
       - my-network
     volumes:
       - db:/data/db
       - ./db-seed:/docker-entrypoint-initdb.d
-
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 3
  
   frontend:
-    image: nadch4/tp-final-2283110-homebreeze-frontend:${FRONTEND_VO:-latest}
+    image: nadch4/tp-final-2283110-homebreeze-frontend:v1
     build:
       context: ./frontend
     ports:
