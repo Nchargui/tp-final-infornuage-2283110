@@ -68,7 +68,7 @@ services:
     build:
       context: ./tp-final-infornuage-2283110-frontend
     ports:
-      - "80:80"
+      - "9292:9292"
     depends_on:
       - backend
     networks:
