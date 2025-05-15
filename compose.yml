@@ -1,8 +1,35 @@
 services:
+  portainer:
+    image: portainer/portainer-ce:alpine
+    container_name: portainer
+    restart: unless-stopped
+    networks: 
+        - cloud
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    networks: 
+      - cloud
+    ports:
+      - 8096:8096
+    environment:
+      - TZ=America/Montreal
+    volumes:
+      - jellyfin_data:/config
+      - /mnt/media/Movies:/movies
+      - /mnt/media/TV:/tv
+
   backend:
     image: nadch4/tp-final-2283110-homebreeze-backend:v1
     build:
-      context: ./backend
+      context: ./tp-final-infornuage-2283110-backend
     container_name: backend
     ports:
       - "9696:9696"
@@ -16,7 +43,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
     networks:
-      - my-network
+      - cloud
  
   mariadb:
     image: mariadb
@@ -25,7 +52,7 @@ services:
       - MYSQL_ROOT_PASSWORD=1234
       - MYSQL_DATABASE=home_breeze_bd
     networks:
-      - my-network
+      - cloud
     volumes:
       - db:/data/db
       - ./db-seed:/docker-entrypoint-initdb.d
@@ -39,16 +66,18 @@ services:
   frontend:
     image: nadch4/tp-final-2283110-homebreeze-frontend:v1
     build:
-      context: ./frontend
+      context: ./tp-final-infornuage-2283110-frontend
     ports:
       - "80:80"
     depends_on:
       - backend
     networks:
-      - my-network
+      - cloud
 volumes:
+  portainer_data:
+  jellyfin_data:
   db:
  
 networks:
-  my-network:
+  cloud:
     driver: bridge
