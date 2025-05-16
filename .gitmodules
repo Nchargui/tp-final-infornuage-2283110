@@ -1,7 +1,0 @@
-[submodule "tp-final-infornuage-2283110-frontend"]
-	path = tp-final-infornuage-2283110-frontend
-	url = https://github.com/Nchargui/tp-final-infornuage-2283110-frontend.git
-	branch = main
-[submodule "tp-final-infornuage-2283110-backend"]
-	path = tp-final-infornuage-2283110-backend
-	url = https://github.com/Nchargui/tp-final-infornuage-2283110-backend.git
