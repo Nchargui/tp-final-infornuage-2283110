@@ -5,17 +5,17 @@ services:
     restart: unless-stopped
     networks: 
         - cloud
-    ports:
-      - 9000:9000
+    # ports:
+    #   - 9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-    # labels:
-    #   - 'traefik.enable=true'
-    #   - 'traefik.http.routers.portainer.rule=Host(`portainer.2283110.duckdns.org`)'
-    #   - 'traefik.http.routers.portainer.entryPoints=websecure'
-    #   - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-    #   - "traefik.http.routers.portainer.service=frontend"
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.portainer.rule=Host(`portainer.2283110.duckdns.org`)'
+      - 'traefik.http.routers.portainer.entryPoints=websecure'
+      - "traefik.http.services.frontend.loadbalancer.server.port=9000"
+      - "traefik.http.routers.frontnend.service=frontend"
 
   jellyfin:
     image: jellyfin/jellyfin:latest
@@ -23,18 +23,18 @@ services:
     restart: unless-stopped
     networks: 
       - cloud
-    ports:
-      - 8096:8096
+    # ports:
+    #   - 8096:8096
     environment:
       - TZ=America/Montreal
     volumes:
       - jellyfin_data:/config
       - /mnt/media/Movies:/movies
       - /mnt/media/TV:/tv
-    # labels:
-    # - 'traefik.enable=true'
-    # - 'traefik.http.routers.jellyfin.rule=Host(`jellyfin.2283110.duckdns.org`)'
-    # - 'traefik.http.routers.jellyfin.entryPoints=websecure'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.jellyfin.rule=Host(`jellyfin.2283110.duckdns.org`)'
+    - 'traefik.http.routers.jellyfin.entryPoints=websecure'
 
   backend:
     image: nadch4/tp-final-2283110-homebreeze-backend:v1
@@ -78,16 +78,16 @@ services:
     container_name: homebreeze
     build:
       context: ./tp-final-infornuage-2283110-frontend
-    ports:
-      - "9292:9292"
+    # ports:
+    #   - "9292:9292"
     depends_on:
       - backend
     networks:
       - cloud
-    # labels:
-    # - 'traefik.enable=true'
-    # - 'traefik.http.routers.homebreeze.rule=Host(`homebreeze.2283110.duckdns.org`)'
-    # - 'traefik.http.routers.homebreeze.entryPoints=websecure'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.homebreeze.rule=Host(`homebreeze.2283110.duckdns.org`)'
+    - 'traefik.http.routers.homebreeze.entryPoints=websecure'
 
   proxy:
       image: traefik
