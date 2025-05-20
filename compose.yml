@@ -37,7 +37,7 @@ services:
     - 'traefik.http.routers.jellyfin.entryPoints=websecure'
 
   backend:
-    image: nadch4/tp-final-2283110-homebreeze-backend:v1
+    image: nadch4/tp-final-2283110-homebreeze-backend:v3
     build:
       context: ./tp-final-infornuage-2283110-backend
     container_name: backend
@@ -74,12 +74,12 @@ services:
       retries: 3
  
   frontend:
-    image: nadch4/tp-final-2283110-homebreeze-frontend:v1
+    image: nadch4/tp-final-2283110-homebreeze-frontend:v3
     container_name: homebreeze
     build:
       context: ./tp-final-infornuage-2283110-frontend
     # ports:
-    #   - "9292:9292"
+    #   - "80:80"
     depends_on:
       - backend
     networks:
@@ -88,7 +88,7 @@ services:
     - 'traefik.enable=true'
     - 'traefik.http.routers.homebreeze.rule=Host(`homebreeze.2283110.duckdns.org`)'
     - 'traefik.http.routers.homebreeze.entryPoints=websecure'
-    - 'traefik.http.services.homebreeze.loadbalancer.server.port=9292'
+    - 'traefik.http.services.homebreeze.loadbalancer.server.port=80'
 
   proxy:
       image: traefik
