@@ -20,7 +20,7 @@ services:
     ## activer traefik, associer nom de domaine, sécurise la connexion (HTTPS)
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.portainer.rule=Host(`portainer.2283110.duckdns.org`)'
+      - 'traefik.http.routers.portainer.rule=Host(`portainer.nchargui.duckdns.org`)'
       - 'traefik.http.routers.portainer.entryPoints=websecure'
       - "traefik.http.services.frontend.loadbalancer.server.port=9000"
       - "traefik.http.routers.frontend.service=frontend"
@@ -45,7 +45,7 @@ services:
     ## activer traefik, associer nom de domaine, sécurise la connexion (HTTPS)
     labels:
     - 'traefik.enable=true'
-    - 'traefik.http.routers.jellyfin.rule=Host(`jellyfin.2283110.duckdns.org`)'
+    - 'traefik.http.routers.jellyfin.rule=Host(`jellyfin.nchargui.duckdns.org`)'
     - 'traefik.http.routers.jellyfin.entryPoints=websecure'
 
   backend:
@@ -110,7 +110,7 @@ services:
     ## activer traefik, associer nom de domaine, sécurise la connexion (HTTPS)
     labels:
     - 'traefik.enable=true'
-    - 'traefik.http.routers.homebreeze.rule=Host(`homebreeze.2283110.duckdns.org`)'
+    - 'traefik.http.routers.homebreeze.rule=Host(`homebreeze.nchargui.duckdns.org`)'
     - 'traefik.http.routers.homebreeze.entryPoints=websecure'
 
   proxy:
@@ -140,15 +140,15 @@ services:
         - "--entrypoints.websecure.address=:443"
         - "--entrypoints.websecure.http.tls=true"
         - "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
-        - "--entrypoints.websecure.http.tls.domains[0].main=2283110.duckdns.org"
-        - "--entrypoints.websecure.http.tls.domains[0].sans=*.2283110.duckdns.org"
+        - "--entrypoints.websecure.http.tls.domains[0].main=nchargui.duckdns.org"
+        - "--entrypoints.websecure.http.tls.domains[0].sans=*.nchargui.duckdns.org"
       ## persistace certificat let`s encrypt et détéction des autres services utilisant reverse proxy
       volumes:
         - "../data/traefik/letsencrypt:/letsencrypt"
         - "/var/run/docker.sock:/var/run/docker.sock:ro"
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.api.rule=Host(`2283110.duckdns.org`)'
+        - 'traefik.http.routers.api.rule=Host(`nchargui.duckdns.org`)'
         - 'traefik.http.routers.api.entryPoints=websecure'
         - 'traefik.http.routers.api.service=api@internal'
       ports:
